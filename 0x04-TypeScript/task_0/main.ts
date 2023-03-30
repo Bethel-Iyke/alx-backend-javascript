@@ -41,3 +41,14 @@ document.body.appendChild(table);
 //test for the code above
 console.log(student1);
 console.log(student2);
+
+class Teacher {
+    constructor({firstName, lastName, fullTimeEmployee, yearsOfExperience, location, ...otherAttributes}) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fullTimeEmployee = fullTimeEmployee;
+        this.yearsOfExperience = yearsOfExperience;
+        this.location = location;
+        Object.assign(this.otherAttributes);
+    }
+}
