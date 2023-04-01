@@ -1,9 +1,13 @@
-function getResponseFromAPI(success) {
-  return new promise((resolve, reject) => {
+const trueBool = { status: 200, body: 'Success' };
+const falseBool = 'The fake API is not working currently';
+
+export default function getFullResponseFromAPI(success) {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-constant-condition
     if (success) {
-      resolve({ status: 200, body: 'Success' });
+      resolve(trueBool);
     } else {
-      reject(new error('The fake API is not working currently'));
+      reject(new Error(falseBool));
     }
   });
 }
