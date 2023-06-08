@@ -1,4 +1,6 @@
 /*  A program that counts students from a database and throws an error message if it couldnt access the database */ 
+
+
 const fs = require('fs');
 
 function countStudents(path) {
