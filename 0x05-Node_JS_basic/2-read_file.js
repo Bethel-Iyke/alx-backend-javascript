@@ -1,39 +1,50 @@
-/*  A program that counts students from a database and throws an error message if it couldnt access the database */ 
-
-
 const fs = require('fs');
 
 function countStudents(path) {
+  //   fs.readFile(path, (err, data) => {
+  //     if (err) {
+  //       throw new Error("Cannot load the database");
+  //     }
+  //   });
   try {
-    const data = fs.readFileSync(path, 'utf8');
-    const lines = data.split('\n');
-    lines.shift();
-    let count = lines.length;
-    if (lines[lines.length - 1] === '') {
-      count -= 1;
-    }
-    console.log(`Number of students: ${count}`);
-    const fields = {};
-    for (const line of lines) {
-      if (fields[line.split(',')[3]] === undefined) {
-        fields[line.split(',')[3]] = [];
+    const data = fs.readFileSync(path);
+    // if (!data) {
+    // throw Error('Cannot load the database');
+    // }
+
+    // console.log(data.toString());
+    const nameList = data
+      .toString()
+      .split('\n')
+      .filter((name) => name.length > 0);
+    // console.log(name_list);
+    const students = nameList.length - 1;
+    console.log(`Number of students: ${students}`);
+
+    const CSname = [];
+    const SWEname = [];
+
+    nameList.forEach((element) => {
+      if (element.includes('CS')) {
+        CSname.push(element.split(',')[0]);
+      } else if (element.includes('SWE')) {
+        SWEname.push(element.split(',')[0]);
       }
-      if (line.split(',')[0] !== 'firstname') {
-        fields[line.split(',')[3]].push(line.split(',')[0]);
-      }
-    }
-    for (const field of Object.keys(fields)) {
-      if (field) {
-        console.log(
-          `Number of students in ${field}: ${
-            fields[field].length
-          }. List: ${fields[field].join(', ')}`,
-        );
-      }
-    }
+    });
+
+    console.log(
+      `Number of students in CS: ${CSname.length}. List: ${CSname.join(', ')}`,
+    );
+    console.log(
+      `Number of students in SWE: ${SWEname.length}. List: ${SWEname.join(
+        ', ',
+      )}`,
+    );
   } catch (err) {
-    throw new Error('Cannot load the database');
+    throw Error('Cannot load the database');
   }
+
+  //   console.log(CSname);
 }
 
 module.exports = countStudents;
