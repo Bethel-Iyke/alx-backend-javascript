@@ -1,50 +1,41 @@
 const fs = require('fs');
 
 function countStudents(path) {
-  //   fs.readFile(path, (err, data) => {
-  //     if (err) {
-  //       throw new Error("Cannot load the database");
-  //     }
-  //   });
+  let content;
+
   try {
-    const data = fs.readFileSync(path);
-    // if (!data) {
-    // throw Error('Cannot load the database');
-    // }
-
-    // console.log(data.toString());
-    const nameList = data
-      .toString()
-      .split('\n')
-      .filter((name) => name.length > 0);
-    // console.log(name_list);
-    const students = nameList.length - 1;
-    console.log(`Number of students: ${students}`);
-
-    const CSname = [];
-    const SWEname = [];
-
-    nameList.forEach((element) => {
-      if (element.includes('CS')) {
-        CSname.push(element.split(',')[0]);
-      } else if (element.includes('SWE')) {
-        SWEname.push(element.split(',')[0]);
-      }
-    });
-
-    console.log(
-      `Number of students in CS: ${CSname.length}. List: ${CSname.join(', ')}`,
-    );
-    console.log(
-      `Number of students in SWE: ${SWEname.length}. List: ${SWEname.join(
-        ', ',
-      )}`,
-    );
+    content = fs.readFileSync(path);
   } catch (err) {
-    throw Error('Cannot load the database');
+    throw new Error('Cannot load the database');
   }
 
-  //   console.log(CSname);
+  content = content.toString().split('\n');
+
+  let students = content.filter((item) => item);
+
+  students = students.map((item) => item.split(','));
+
+  const NUMBER_OF_STUDENTS = students.length ? students.length - 1 : 0;
+  console.log(`Number of students: ${NUMBER_OF_STUDENTS}`);
+
+  const fields = {};
+  for (const i in students) {
+    if (i !== 0) {
+      if (!fields[students[i][3]]) fields[students[i][3]] = [];
+
+      fields[students[i][3]].push(students[i][0]);
+    }
+  }
+
+  delete fields.field;
+
+  for (const key of Object.keys(fields)) {
+    console.log(
+      `Number of students in ${key}: ${fields[key].length}. List: ${fields[
+        key
+      ].join(', ')}`,
+    );
+  }
 }
 
 module.exports = countStudents;
