@@ -4,10 +4,10 @@ import controllerRouting from './routes/index';
 const app = express();
 const port = 1245;
 
-app.use(controllerRouting);
+controllerRouting(app);
 
 app.listen(port, () => {
-  // server running
+  //   console.log(`Example app listening at http://localhost:${port}`);
 });
 
 export default app;

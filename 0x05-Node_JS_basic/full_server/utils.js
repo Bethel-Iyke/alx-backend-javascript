@@ -1,21 +1,34 @@
 const fs = require('fs');
 
 function readDatabase(path) {
-  const content = fs.readFileSync(path, 'utf8').split('\n');
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, 'utf8', (err, data) => {
+      if (err) {
+        reject(Error(err));
+        return;
+      }
+      const content = data.toString().split('\n');
 
-  const students = content.filter((item) => item).map((item) => item.split(','));
+      let students = content.filter((item) => item);
 
-  const fields = {};
-  for (const student of students) {
-    if (student[3]) {
-      fields[student[3]] = fields[student[3]] || [];
-      fields[student[3]].push(student[0]);
-    }
-  }
+      students = students.map((item) => item.split(','));
 
-  delete fields.field;
+      const fields = {};
+      for (const i in students) {
+        if (i !== 0) {
+          if (!fields[students[i][3]]) fields[students[i][3]] = [];
 
-  return fields;
+          fields[students[i][3]].push(students[i][0]);
+        }
+      }
+
+      delete fields.field;
+
+      resolve(fields);
+
+      //   return fields;
+    });
+  });
 }
 
 export default readDatabase;
